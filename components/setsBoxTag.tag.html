@@ -1,0 +1,99 @@
+<setsBoxTag>
+	
+   
+   	<div class="column center userBox setsBoxTag _darkTheme z-depth-1">
+  	   <div class="containerBox" style="margin-top: 10px ">
+   
+         <!-- <div class="iconBox" ></div> -->
+         <div class="wide column" style="margin-bottom: 15px;"></div>
+         <div class="wide column inputwrap">
+          <input type="text" name="" value="{key}">
+         </div>
+         <div class="eight wide column inputwrap">
+          <span>x</span>
+          <input type="number" name="" value="{x}">
+         </div>         
+         <div class="eight wide column inputwrap">
+          <span>y</span>
+          <input type="number" name="" value="{y}">
+         </div>
+         <div class="eight wide column inputwrap">
+          <span>width</span>
+          <input type="number" name="" value="{width}">
+         </div>         
+         <div class="eight wide column inputwrap">
+          <span>height</span>
+          <input type="number" name="" value="{height}">
+         </div>
+
+         <div class="wide column inputwrap">
+          <span>scale</span>
+          <input type="range" name="" value="{scale}">
+         </div>
+
+   
+       </div>
+
+  	</div>
+
+
+   <style type="text/css">
+    input
+    {
+      width: 100% !important;
+      color: #fff !important;
+      letter-spacing: 1px;
+    }
+    .inputwrap
+    {
+      color: #fff;
+      font-family: 'caps';
+    }
+    .setsBoxTag
+    {
+
+      position: absolute;
+      top: 45px;
+      width: 200px;
+      height: calc(100% - 44px);
+      cursor: move;
+      right: 0%;
+      /*border-radius: 5px 5px;*/
+      /*background-color: #5c102f;*/
+
+      border-left: solid 1px black;
+    }
+    .containerBox
+    {
+      position: relative;
+    }
+
+   </style>
+  
+   <script>
+  	   //On.mount !important for events and effects
+  	   var self = this;
+
+  	   this.on('mount', function() 
+  	   {
+          
+
+             riot.store.on('objectselected', function(obj){
+                 console.log('hjk')
+                 self.key = obj.key;
+                 self.x = obj.x;
+                 self.y = obj.y;
+                 self.width = obj.width;
+                 self.height = obj.height;
+                 self.scale = obj.scale.x;
+                 self.update();
+
+             })
+ 
+         
+       })
+ 
+
+  </script>
+
+</setsBoxTag>

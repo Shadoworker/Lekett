@@ -1,0 +1,108 @@
+<nodesBoxTag>
+	
+   
+   	<div class="column center userBox nodesBoxTag _darkTheme z-depth-1">
+  	   <div class="containerBox" >
+    
+         <div class="wide column" style="padding: 0px;margin-top: 20px; color:white">
+            
+            
+
+            <div class="ui accordion">
+               
+                <div class="title active" style="color:white">
+                  <i class="dropdown icon"></i>
+                  Scene
+                </div>
+                <div class="content active">
+                  
+                   <nodeItemTag each="{ child in scene_children }" item={child}  ></nodeItemTag>
+                  
+
+                </div>
+
+             </div>
+           
+ 
+         </div>
+
+       </div>
+
+  	</div>
+
+
+   <style type="text/css">
+    
+    
+    .nodesBoxTag
+    {
+
+      position: absolute;
+      top: 45px;
+      width: 160px;
+      height: calc(100% - (44px + 170px)) ;
+      /*cursor: move;*/
+      left: 0%;
+      /*border-radius: 5px 5px;*/
+      /*background-color: #fff;*/
+      overflow-y: scroll;
+      border-right : solid 1px black;
+    }
+   
+    .title{
+       color: #fff; 
+       text-align: left; 
+       text-indent: 10px;
+     }
+
+   </style>
+  
+   <script>
+  	   //On.mount !important for events and effects
+  	   var self = this;
+
+  	   this.on('mount', function() 
+  	   {
+            self.rectcount = -1;
+            self.scene_children = [];
+
+            $('#rect').on('click', function(){
+                self.rectcount+=1;
+                self.update();
+                var rectname = 'rect'+(self.rectcount);
+                // console.log(rectname)
+                riot.store.trigger('addrect', rectname);
+
+            })
+
+
+
+           riot.store.on('parsed', function(children){
+                
+               self.scene_children = children; 
+               self.update();
+
+
+
+           });
+
+
+ 
+        
+            
+         $('.ui.accordion')
+          .accordion({exclusive : false});
+
+
+
+
+
+
+
+
+       })
+ 
+
+  </script>
+
+</nodesBoxTag>

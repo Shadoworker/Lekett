@@ -1,0 +1,357 @@
+<timelineNodeItemTag>
+	
+      <div  hide={ tagNotMatched } class={isParent ? 'ui accordion timelineNodeItemTag' : 'timelineNodeItemTag'}  >
+            <div class="title timelineNodeTag"  data-lktClass={ lktClass } >
+                <i show={ isParent } class="dropdown icon" style="
+                  float: left; 
+                  margin-top: 4px;
+                  transform-origin:50% 50%;"></i> 
+                  
+ 
+
+                  {timelineNodeTag}
+
+                  
+
+            </div>
+            <div show={ isParent }  class="content childrenBloc " >
+                  
+                  <div class="ui list">
+                   
+                    <div class="item"  each="{ anim in animatables }"  >
+                      
+                      <div class="content propname">
+                        <img src="../assets/circle.png" class="propname_icon">
+                        {anim}
+                        <img src="../assets/addblue_icon.png" animatable={anim} node-tag={ timelineNodeTag } data-lktClass={ lktClass } class="addkeyframe">
+                      </div>
+                    </div>
+                    
+                   </div>
+
+                <timelineNodeItemTag each="{ child in children }" item={child} ></timelineNodeItemTag>
+
+            </div>
+                    
+       </div>
+ 
+  
+ <style type="text/css">
+   
+    .timelineNodeItemTag{
+        
+        margin:0px !important;
+
+        /*border-bottom: solid 0.5px gray !important;*/
+
+     }
+
+    .childrenBloc
+    {
+
+
+    }
+
+    .item { 
+        
+        margin: 2px;  
+
+     }   
+
+    .propname { 
+        
+        color: #12f5a1;  
+
+     }       
+    
+    .icon.animatable_icon { 
+        
+        font-size: 10px;  
+        margin-left: 25px !important;
+        color: #fff;
+
+     }
+
+    .title:not(.ui) { 
+     
+      padding: 0.4em 0em;
+
+     }
+
+    .timelineNodeTag:hover{
+        
+        background-color: #1a1a1a;
+
+     } 
+    .timelineNodeTagActive  {
+        
+      background-color: #80808040;
+
+
+     }   
+    .timelineNodeTagActive:hover {
+        
+        background-color: #80808040;
+
+     }     
+
+    .timelineNodeTag{
+       color: #fff !important; 
+       text-align: left !important; 
+       text-indent: 15px !important;
+     }
+
+     img.propname_icon{
+
+          width: 10px;
+          float: left;
+          margin-left: 25px;
+          margin-top: 2px;
+     }
+     img.addkeyframe{
+
+          width: 12px;
+          float: right;
+          margin-right: 15px;
+          margin-top: 2px;
+          cursor: pointer;
+
+     }
+
+ </style>
+
+  <script>
+  	   //On.mount !important for events and effects
+  	   var self = this;
+       var tags = ['g', 'rect', 'circle','path'];
+
+     
+
+  	   this.on('mount', function() 
+  	   {
+          
+
+            self.tagNotMatched = false;
+            self.isParent = false;
+            self.lktClass = '';
+
+      
+            // self.animatables = ['translateX', 'translateY', 'scale','rotate','opacity', 'color'];
+ 
+            var baseNode = opts.item;
+            if (opts.item.node == undefined) 
+             {
+              baseNode = opts.item.instance; //SVGjs instance: In order to deal with same data structure : Checkout log
+             }
+            self.item = baseNode;
+            self.children = baseNode.node.children;
+           
+            if (baseNode.node.children.length > 0)
+             {
+                 self.isParent = true;
+             }
+
+          
+
+            self.lktClass = baseNode.attr('data-lktClass');
+            
+
+            self.timelineNodeTag = baseNode.type;
+            
+
+            if (! window.__animatables.hasOwnProperty(baseNode.type))
+             {
+                 self.tagNotMatched = true;
+                 // console.log("true")
+             }
+             else
+            {
+              
+               //Get node animatable props
+               self.animatables = Object.keys(window.__animatables[baseNode.type]);
+
+            
+
+            }
+
+            
+            self.update();
+            
+
+            
+
+          
+
+ 
+
+
+         const ipc = require('electron').ipcRenderer;
+
+
+         function updateActiveItem(lktClass) {
+              // body...
+
+                 $('.timelineNodeTagActive').removeClass('timelineNodeTagActive');
+
+                 $("div.timelineNodeTag[data-lktClass='"+lktClass+"']").addClass('timelineNodeTagActive')
+
+                  //Open parent if closed : accordion
+                  //  When for example a sub timelineNode is selected
+                  //  and that this one is collapsed on sceneNodesList
+                  //  This allows to unwrap the parent of that node and show it out
+                   $("div.timelineNodeTag[data-lktClass='"+lktClass+"']")
+                     .parent()
+                      .closest( "div.ui.accordion" )
+                        .each(function(i){
+                            $(this).parent().accordion('open',i);
+                        });
+
+            }
+
+
+            $('.timelineNodeTag').unbind().click(function(e) {
+              
+
+                $('.timelineNodeTagActive').removeClass('timelineNodeTagActive');
+                $(this).addClass('timelineNodeTagActive')
+
+                var selectedNodeClass = $(this).attr('data-lktClass')
+                
+                //  We settup two different trigger label 'timelineNodeSelected...' and 'scene...' to avoid bubble effect
+
+               riot.store.trigger('timelineNodeSelected',selectedNodeClass)
+
+             });
+            
+
+            //Scene Node Selected
+             riot.store.on('sceneNodeSelected', function(lktClass){
+                  
+                 updateActiveItem(lktClass)
+
+              });
+
+
+           
+           //New keyframe
+           $('.addkeyframe').unbind().click(function(e) {
+              
+               e.stopPropagation()
+
+               var nodeLktClass = $(this).attr('data-lktClass'); //self.lktClass is corrupted;
+               var animatable = $(this).attr('animatable')
+               var nodeTag = $(this).attr('node-tag')
+
+               var realAnimatable = window.__animatables[nodeTag][animatable]
+                
+               //Create animation
+               //Get node animation timeline if exist
+               var _timelineAnimations = window._lktTimeline.children;
+               var _nodeTimeline = _timelineAnimations.find(a => {
+                  
+                   return a.lkt === '.'+nodeLktClass
+               
+                });
+               
+                var nodeNextAnimations = { targets :  '.'+nodeLktClass }
+                    
+                //For following checkout animejs timeline Object structure
+                
+                if(_nodeTimeline) 
+                {
+ 
+
+                    var newAnimationObject = { targets : '.'+nodeLktClass } 
+                    
+                    var _nodePrevAnimations = _nodeTimeline.animations;
+ 
+                    //Get all existing animation from node timeline
+                    //Initializing Next animations object for the node
+                 
+                    for (var i = 0; i < _nodePrevAnimations.length; i++) {
+                      
+                      var _nodePrevAnim = _nodePrevAnimations[i];
+
+                      var _property, _value, _duration, _delay /*Delay is starting point*/, _easing;
+
+                      _property = _nodePrevAnim.property;
+                      _duration = _nodePrevAnim.duration;
+                      _delay = _nodePrevAnim.delay;
+                      _value = _nodePrevAnim.lktValue ; 
+                      _easing = _nodePrevAnim.lktEasing ;  
+
+                      var existingAnim = {
+
+                         value : _value,
+                         duration : _duration,
+                         delay : _delay,
+                         easing : _easing
+
+                      } 
+                      
+
+                      nodeNextAnimations[_property] = existingAnim;
+
+
+
+
+                    }
+
+                    //New animation 
+                    
+                    var newAnim = {
+
+                         value :  400,
+                         duration : 1200,
+                         delay : 0,
+                         easing : 'linear'
+
+                      } 
+
+                   nodeNextAnimations[realAnimatable] = newAnim;
+
+                    //Remove them all now and add them later  with the new created animation
+                    var _lktTimeline_childrenTemp 
+
+                     = window._lktTimeline.children
+                      .filter((ob)=>{ return ob.lkt != '.'+nodeLktClass} )
+
+                     window._lktTimeline.children = _lktTimeline_childrenTemp;
+
+                }
+                else
+                { 
+                   //New animation
+                    
+                    var newAnim = {
+
+                         value :  400,
+                         duration : 1200,
+                         delay : 0,
+                         easing : 'linear'
+
+                      } 
+
+                    nodeNextAnimations[realAnimatable] = newAnim;
+
+                }
+
+               
+                // console.log(nodeNextAnimations)
+                window._lktTimeline.add(nodeNextAnimations , 0) //Each node animation start at Timeline.0 , delay set real starting point
+
+
+
+             });
+            
+ 
+
+
+
+
+        })
+ 
+
+  </script>
+
+</timelineNodeItemTag>

@@ -1,0 +1,178 @@
+<timelineBoxTag>
+	
+   
+   	<div class="wild column  center userBox timelineBoxTag _darkTheme z-depth-1" style="padding: 0px;padding-bottom: 25px !important;"> 
+  	   <div class="ui grid containerBox">
+    
+         <div class="four wide column timelineNodesBox" style="padding: 0px; padding-bottom: 15px !important;" >
+            
+
+            <div class="ui accordion">
+               
+                <div class="title active" style="color:white">
+                  <i class="dropdown icon"></i>
+                   Animation
+                </div>
+                <div class="content active" >
+                   
+                  <timelineNodeItemTag each="{ child in timeline_children }" item={child}  ></timelineNodeItemTag>
+
+                </div>
+
+             </div>
+            
+        
+         </div> 
+
+         <div class="twelve wide column timelineBox" style="padding: 0px ">
+             
+             <div class="twelve wide column ctrlsBox" style="padding: 0px ">
+ 
+                 <img id="restart_icon" class="lkt_icon_btn ctrl_icon" src="../assets/restart_icon.png" title="beginning" style=" width: 22px; ">                 
+                 <img id="play_icon" class="lkt_icon_btn ctrl_icon" src="../assets/play_icon.png" title="play animation" style=" width: 24px; ">
+                 <img id="loop_icon" class="lkt_icon_btn ctrl_icon" src="../assets/loop_icon.png" title="loop" style=" width: 22px; "> 
+
+             </div>
+            
+             <div class="twelve wide column keyframesBox" style="padding: 0px ">
+               
+             </div>
+       </div>
+
+  	</div>
+
+
+   <style type="text/css">
+    div.stateitem
+    {
+      width: 92.5%;
+      margin-left: 3.75%;
+      height: 36px;
+      border-radius: 3px 3px;
+      background-color: gray;
+      margin-bottom: 6px;
+    }
+    .timelineBoxTag
+    {
+
+      position: absolute;
+      bottom: 0px;
+      width: calc(100% - 200px);
+      height: 170px;
+      left: 0%;
+      border-top: solid 1px black;
+      padding-bottom: 25px;
+      /*border-radius: 5px 5px;
+      background-color: #fff;*/
+    }
+    .containerBox
+    {
+      position: relative;
+    }
+
+    .timelineNodesBox{
+
+        height: 170px ;
+        border-right: solid 1px black;
+        overflow-y: scroll;
+
+
+    }
+    .timelineBox{
+
+        height: 170px ;
+     
+    }
+
+    .title{
+       color: #fff; 
+       text-align: left; 
+       text-indent: 10px;
+       /*background-color: rgb(15 , 44 , 59);*/
+     }
+
+     .ctrlsBox{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 33px;
+      background-color: rgb(50,59,79);
+     }
+
+     .ctrl_icon{
+
+       margin-left: 8px;
+       margin-right: 8px;
+       -webkit-filter : brightness(0) invert(1);
+       transition: -webkit-filter 0.2s linear;
+
+     }
+    
+     .ctrl_icon:hover{
+
+       -webkit-filter : brightness(1);
+       transition: -webkit-filter 0.2s linear;
+
+     }
+
+     .ctrl_icon_active{
+       
+        transform: scale(1.025);
+       -webkit-filter : brightness(1);
+        transition:  transform 0.4s linear;
+
+     }     
+
+    .keyframesBox{
+
+      height: 147px; 
+      overflow: scroll;
+
+     }
+   </style>
+  
+   <script>
+  	   //On.mount !important for events and effects
+  	   var self = this; 
+
+  	   this.on('mount', function() 
+  	   {
+          
+           self.timeline_children = [];
+
+           
+           riot.store.on('parsed', function(children){
+                
+               self.timeline_children = children; 
+               self.update();
+
+
+
+           });
+
+
+
+        //Animation accordion
+         $('.ui.accordion')
+            .accordion({exclusive : false});
+
+         
+
+
+
+        //Ctrls
+
+         $('#play_icon').unbind().click(function(e) {
+
+              $('#play_icon').toggleClass('ctrl_icon_active');
+              window._lktTimeline.play();
+ 
+          });
+ 
+         
+       })
+ 
+
+  </script>
+
+</timelineBoxTag>

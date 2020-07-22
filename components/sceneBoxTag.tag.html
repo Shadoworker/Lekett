@@ -1,0 +1,257 @@
+<sceneBoxTag>
+	
+   
+   	<div class="wild column center userBox sceneBoxTag z-depth-1 " style="padding: 0px;">
+  	    
+     <div class="wild column sceneBox " style="padding: 0px;">
+ 
+        <div class="containerBox graphicView" >
+     
+            <div class="wild column scene" id="scene">
+            
+
+        
+            </div>
+   
+       </div>
+      
+      </div>
+
+
+
+     <div class="wild column rulerBox ruler" style="padding: 0px; margin-top: -1px">
+ 
+      
+
+      </div>
+
+
+
+   
+  	</div>
+
+
+   <style type="text/css">
+ 
+    input.zoom
+    {
+      width: 50px;
+      padding: 5px;
+      border-radius: 5px 5px;
+      outline: none;
+      border:solid 0.5px #d40055;
+      color: #d40055;
+    }
+    .sceneBoxTag
+    {
+
+      position: absolute;
+      top: 85px;
+      width: 67%;
+      height: 62%;
+      left: 16.7%;
+      border:solid 0.5px #f3f3f3;
+      border-radius: 5px 5px;
+      /*background-color: #fff;*/
+      background-image: url('../assets/transparent_bg.png');
+      background-repeat: repeat;
+    }
+
+    .sceneBox, .rulerBox
+    {
+
+      position: absolute;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      left: 0px;
+      z-index: 1;
+      border-radius: 5px 5px;
+      background-color: transparent;
+    }
+    .rulerBox
+    {    
+      z-index: 2;
+    }
+    .corner{
+
+       border-radius: 6px 0px 0px 0px;
+
+    }
+
+    .containerBox.graphicView
+    {
+      position: relative;
+      display: block;
+    }
+    
+    div.column.scene
+    {
+      position: absolute;
+      z-index: 1;
+      padding: 0px;
+      width: 100%;
+      /*background-color: red;*/
+      overflow: scroll;
+    }
+    
+
+     span
+     {
+      cursor: default;
+     }
+     span>img
+     {
+      cursor: pointer;
+     }
+    
+    div.zoomopt
+    {
+      position: absolute;
+      z-index: 3;
+      bottom: 10px;
+      right: 15px;
+    }
+ 
+   </style>
+  
+   <script>
+  	   //On.mount !important for events and effects
+  	   var self = this;
+      
+       var SVG = require('svg.js')
+       
+      
+  	   this.on('mount', function() 
+  	   {
+          
+          self.activestateitem = 0;
+          self.recentlyUpdated = -1;
+         //Later set in a single file
+          var tags = {'g':0 , 'rect' : 0 , 'circle' : 0};
+       
+        
+          self.update();
+         
+         $('.scene').css('height' , $('.sceneBoxTag').height() + 'px' )
+
+
+         //LOAD ANIMATION TEST FILE 
+         function load_scene(path) {
+           
+            $('.scene').load(path)
+
+         }
+         
+         // var newScene = SVG('scene').size('100%', '100%')
+
+         // newScene.svg(` <rect class="rectus" x="250" y="180" width="150" height="100" style="fill:rgb(10,20,205);stroke-width:1;stroke:rgb(0,0,0)" /> 
+         //    <g>
+         //     <rect class="rectus2" x="450" y="110" width="50" height="40" style="fill:rgb(100,20,20);stroke-width:1;stroke:rgb(0,0,0)" />
+
+         //      <rect class="rectus2" x="450" y="190" width="60" height="40" style="fill:rgb(100,0,50);stroke-width:1;stroke:rgb(0,0,0)" />
+         //    </g>
+         //    <g>
+         //     <rect class="rectus2" x="250" y="240" width="50" height="40" style="fill:rgb(10,20,20);stroke-width:1;stroke:rgb(0,0,0)" />
+ 
+         //    </g>
+         //  `);
+
+          //  We suppose that the upload process of the SVG file has been done and that animXXfile has been created and import process and animation already migrated over there 
+
+           setTimeout(function(){
+
+               load_scene('../animations/anim00.html');
+
+            },500);
+           
+
+           //SCENE PARSER
+
+           function scene_parser(scene) {
+              
+              var sceneChildren = scene.children()
+          
+              riot.store.trigger('parsed' , sceneChildren)
+
+           }
+           
+
+           setTimeout(()=>{
+
+               var newScene = window._lktScene; //From anim file as global var
+               newScene.each(function(i, children) {
+                  
+                 
+                      var this_tag = this.type
+                   
+                      if (tags[this_tag] != undefined) {
+                      //Update tags
+                       tags[this_tag] = tags[this_tag] + 1;
+                        
+
+                       var this_tag_ref = tags[this_tag]
+
+                       //Setting Lekett class
+                       var lktClass = 'lkt_'+this_tag+'_'+this_tag_ref;
+                       this.addClass(lktClass)
+                       //Setting lkt class reference key
+                       this.data('lktClass' , lktClass)
+
+                       // console.log(this)
+                    
+                    }
+
+
+                },true)
+
+
+               setTimeout(function(){
+               
+                  scene_parser(newScene);
+
+               },50)
+
+
+
+
+            },1600);
+
+           
+
+
+        
+         
+         //First Load
+         // load_scene('../animations/anim00.html');
+ 
+         riot.store.on('refresh', function(statename){
+
+              
+          });
+
+  
+         //SAVING 
+         $(window).keypress(function(event) {
+              if (!(event.which == 115 && event.ctrlKey) && !(event.which == 19)) return true;
+               
+          });
+
+
+       $('.ruler').ruler();
+
+          
+
+
+       }) //On mount
+
+    
+      //Utils functions
+
+      
+
+       ///////////////////////////////////////////////
+
+  </script>
+
+</sceneBoxTag>

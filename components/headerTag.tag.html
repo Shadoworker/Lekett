@@ -1,0 +1,84 @@
+<headerTag>
+	
+   
+   	<div class="ui grid headerTag" >
+      <div class="wide column">
+    	
+      	<span if={ showicon } class="left">
+    			<img class="logo_min" src="../assets/logo_min.png">
+    		</span> 
+    		<span class="right">
+    			<span><img id="minimizer" class="win_top_icon" src="../assets/minimize_icon.png"></span>
+    			<span><img id="maximizer" class="win_top_icon" src="../assets/maximize_icon.png"></span>
+    			<span><img id="closer" class="win_top_icon" src="../assets/close_icon.png"></span>
+    		</span>
+
+     </div>
+
+  	</div>
+  
+ <style type="text/css">
+   
+     .headerTag{
+        z-index: 15;
+        border-bottom: solid 1px black;
+
+     }
+ 
+
+
+ </style>
+
+  <script>
+  	   //On.mount !important for events and effects
+  	   var self = this;
+  	   this.on('mount', function() 
+  	   {
+
+            const ipc = require('electron').ipcRenderer;
+
+
+            self.wicons = opts.wicons
+            self.showicon = opts.showicon
+            self.darkTheme = opts.darkTheme
+            
+
+            //If true ,when this window is closed,the app is quitted
+       
+            self.closeAll = opts.closeAll
+
+            self.update()
+
+            if(self.darkTheme)
+            {
+              $('.headerTag').addClass('darkTheme');
+            }
+
+
+
+            // console.log(self.wicons);
+            for (var i = 0; i < self.wicons.length; i++)
+             {
+            	if(!(self.wicons[i].active))
+		    	  {$('.win_top_icon').eq(i).addClass('inactiveicon');}
+
+             }
+		   
+	   	   $('#minimizer').on('click', () => { ipc.send('minimize-me'); });
+  		   $('#maximizer').on('click', () => { ipc.send('maximize-me'); });
+  	     
+          if (!(self.closeAll))
+           {
+            $('#closer').on('click', () => { ipc.send('close-me'); });
+           }
+          else
+            $('#closer').on('click', () => { ipc.send('closeAll'); });
+
+
+
+        })
+ 
+
+  </script>
+
+</headerTag>

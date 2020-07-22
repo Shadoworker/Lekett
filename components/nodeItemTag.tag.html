@@ -1,0 +1,181 @@
+<nodeItemTag>
+	
+      <div  hide={ tagNotMatched } class={isParent ? 'ui accordion nodeItemTag' : 'nodeItemTag'}  >
+            <div class="title sceneNodeTag" data-lktClass={ lktClass } >
+                <i show={ isParent } class="dropdown icon" style="
+                  float: left; 
+                  margin-top: 4px;
+                  transform-origin:50% 50%;"></i> 
+                   <i if={ sceneNodeTag == 'rect'} class="square outline  icon" style="
+                  float: left; 
+                  margin-top: 4px;
+                  transform-origin:50% 50%;"></i> 
+                   <i if={ sceneNodeTag == 'g'}  class="bars icon" style="
+                  float: left; 
+                  margin-top: 4px;
+                  transform-origin:50% 50%;"></i>
+
+
+                  {sceneNodeTag}
+            </div>
+            <div show={ isParent }  class="content childrenBloc" >
+                      
+                <nodeItemTag each="{ child in children }" item={child} ></nodeItemTag>
+
+            </div>
+                    
+       </div>
+ 
+  
+ <style type="text/css">
+   
+    .nodeItemTag{
+        
+        margin:0px !important;
+        /*border-bottom: solid 0.5px gray !important;*/
+
+     }
+
+    .childrenBloc
+    {
+
+
+    }
+
+    .dropdown.icon { 
+        
+
+     }
+
+    .title:not(.ui) { 
+     
+      padding: 0.4em 0em;
+
+     }
+
+    .sceneNodeTag:hover{
+        
+        background-color: #1a1a1a;
+
+     } 
+    .sceneNodeTagActive  {
+        
+      background-image: linear-gradient(to right, #00aad4 , #00d487);
+
+
+     }   
+    .sceneNodeTagActive:hover {
+        
+        background-color: #00bfae;
+
+     }     
+
+    .sceneNodeTag{
+       color: #fff !important; 
+       text-align: left !important; 
+       text-indent: 15px !important;
+     }
+
+ </style>
+
+  <script>
+  	   //On.mount !important for events and effects
+  	   var self = this;
+       var tags = ['g', 'rect', 'circle','path'];
+
+  	   this.on('mount', function() 
+  	   {
+
+            self.tagNotMatched = false;
+            self.isParent = false;
+            self.lktClass = '';
+
+
+            var baseNode = opts.item;
+            if (opts.item.node == undefined) 
+             {
+              baseNode = opts.item.instance; //SVGjs instance: In order to deal with same data structure : Checkout log
+             }
+            self.item = baseNode;
+            self.children = baseNode.node.children;
+           
+            if (baseNode.node.children.length > 0)
+             {
+                 self.isParent = true;
+             }
+
+            self.sceneNodeTag = baseNode.type;
+            
+            if (!tags.includes(baseNode.type))
+             {
+                 self.tagNotMatched = true;
+                 // console.log("true")
+             }
+
+            self.lktClass = baseNode.attr('data-lktClass');
+
+            self.update();
+             
+
+            
+
+          
+
+
+
+
+
+
+
+            const ipc = require('electron').ipcRenderer;
+
+
+            function updateActiveItem(lktClass) {
+             // body...
+              
+                $('.sceneNodeTagActive').removeClass('sceneNodeTagActive');
+                $("div.sceneNodeTag[data-lktClass='"+lktClass+"']").addClass('sceneNodeTagActive')           
+
+                //Open parent if closed : accordion
+                //  When for example a sub timelineNode is selected
+                //  and that this one is collapsed on sceneNodesList
+                //  This allows to unwrap the parent of that node and show it out
+                 $("div.sceneNodeTag[data-lktClass='"+lktClass+"']")
+                   .parent()
+                    .closest( "div.ui.accordion" )
+                      .each(function(i){
+                          $(this).parent().accordion('open',i);
+                      });
+
+
+            }
+
+
+            $('.sceneNodeTag').unbind().click(function(e) {
+              
+                $('.sceneNodeTagActive').removeClass('sceneNodeTagActive');
+                $(this).addClass('sceneNodeTagActive');
+
+                var selectedNodeClass = $(this).attr('data-lktClass')
+                
+                riot.store.trigger('sceneNodeSelected' , selectedNodeClass )
+
+
+             });
+
+
+
+            //Timeline Node Selected
+             riot.store.on('timelineNodeSelected', function(lktClass){
+                  
+                 updateActiveItem(lktClass)
+
+              });
+        
+
+        })
+ 
+
+  </script>
+
+</nodeItemTag>

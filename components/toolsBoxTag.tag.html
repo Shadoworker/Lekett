@@ -1,0 +1,76 @@
+<toolsBoxTag>
+	
+
+   	<div class="column center userBox toolsBoxTag _darkTheme z-depth-1" style="padding: 0px">
+  	   <div class="containerBox" >
+    
+         <div class="wide column" style="padding: 0px !important;margin-top: 20px;">
+            
+            <div class="wide column toolItem">
+                <img src="../assets/objicon.png" id="rect">
+            </div>
+            <div class="wide column toolItem">
+                <img src="../assets/objicon.png" id="rect0">
+            </div>
+         
+         </div>
+
+       </div>
+
+  	</div>
+
+
+   <style type="text/css">
+    
+      .toolItem
+      {
+        padding: 0px !important;
+        margin-bottom: 10px;
+      }
+
+      .toolItem>img
+      {
+        width: 26px; height: auto;
+      }
+  
+     .toolsBoxTag
+      {
+
+       position: absolute;
+       top: 45px;
+       width: 44px;
+       height: calc(100% - 44px) ;
+       /*cursor: move;*/
+       left: 160px;
+       /*border-radius: 5px 5px;*/
+       /*background-color: #fff;*/
+       border-right : solid 1px black;
+     }
+   
+
+   </style>
+  
+   <script>
+  	   //On.mount !important for events and effects
+  	   var self = this;
+
+  	   this.on('mount', function() 
+  	   {
+            self.rectcount = -1;
+
+            $('#rect').on('click', function(){
+                self.rectcount+=1;
+                self.update();
+                var rectname = 'rect'+(self.rectcount);
+                console.log(rectname)
+                riot.store.trigger('addrect', rectname);
+
+            })
+ 
+         
+       })
+ 
+
+  </script>
+
+</toolsBoxTag>
