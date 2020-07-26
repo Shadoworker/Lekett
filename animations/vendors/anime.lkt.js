@@ -650,7 +650,8 @@
                             delay: t[0].delay,
                             endDelay: a.endDelay,
                             lktValue: _lktAnimationValue,
-                            lktEasing: _lktAnimationEasing
+                            lktEasing: _lktAnimationEasing,
+                            lktAnimId: a.lkt_anim_id //Added by lekettMan - important for direct animation referencing : for display, Update and Delete actions
                         }
                     }
                 }(n, e)

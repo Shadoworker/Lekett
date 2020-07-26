@@ -1,4 +1,7 @@
-  window.__animatables = 
+ 
+ // This defines for each svg elements, its animatable properties
+ 
+ window.__animatables = 
   
   {
 

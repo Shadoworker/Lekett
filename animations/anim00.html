@@ -48,7 +48,7 @@
 
          this._lktScene.svg(` <rect class="rectus" x="250" y="180" width="150" height="100" style="fill:rgb(10,20,205);stroke-width:1;stroke:rgb(0,0,0)" /> 
             <g>
-             <rect class="rectus2" x="450" y="110" width="50" height="40" style="fill:rgb(100,20,20);stroke-width:1;stroke:rgb(0,0,0)" />
+              <rect class="rectus2" x="450" y="110" width="50" height="40" style="fill:rgb(100,20,20);stroke-width:1;stroke:rgb(0,0,0)" />
 
               <rect class="rectus4" x="450" y="190" width="60" height="40" style="fill:rgb(100,0,50);stroke-width:1;stroke:rgb(0,0,0)" />
             </g>
@@ -61,21 +61,26 @@
     
 
     ///////////////////////ANIMATION//////////////////////////
-
        setTimeout(()=>{
                
-         this._lktTimeline = anime.timeline({
+         window._lktTimeline = anime.timeline({
               easing:'linear',
               duration: 50000, // Can be inherited 
               // loop: true // Is not inheritedy
-              autoplay: false
+              autoplay: false,
+              
+              update: function(anim) {
+                window.controlsProgressEl.value =  window._lktTimeline.progress;
+              }
+
             });
 
-          this._lktTimeline
+          window._lktTimeline
             .add({
               targets: '.lkt_rect_1', 
 
-              rotate:{                
+              rotate:{     
+                 lkt_anim_id : "lkt_rect_1_rotate_1",           
                  value : 360,
                  duration: 1800,
                  easing: 'easeInOutSine'

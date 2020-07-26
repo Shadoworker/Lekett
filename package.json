@@ -17,11 +17,11 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^7.1.6"
+    "electron": "^7.3.2"
   },
   "dependencies": {
     "hammerjs": "^2.0.8",
-    "materialize-css": "^1.0.0-rc.2",
+    "materialize-css": "^1.0.0",
     "require": "^2.4.20",
     "svg.js": "^2.7.1"
   }

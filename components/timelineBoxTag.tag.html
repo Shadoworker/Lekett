@@ -35,7 +35,11 @@
              </div>
             
              <div class="twelve wide column keyframesBox" style="padding: 0px ">
-               
+              
+              <div class="slidecontainer">
+                <input style="width :100%; " type="range" min="1" max="100" value="0" class="timeline_progress_ctrl" id="myRange">
+              </div>
+
              </div>
        </div>
 
@@ -159,7 +163,12 @@
          
 
 
-
+       window.controlsProgressEl = document.querySelector('.timeline_progress_ctrl');
+        
+       window.controlsProgressEl.addEventListener('input', function() {
+         if(window._lktTimeline)
+            window._lktTimeline.seek(window._lktTimeline.duration * (window.controlsProgressEl.value / 100));
+        });
         //Ctrls
 
          $('#play_icon').unbind().click(function(e) {
@@ -169,6 +178,9 @@
  
           });
  
+
+
+
          
        })
  

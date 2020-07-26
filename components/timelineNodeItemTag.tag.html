@@ -268,43 +268,47 @@
                     //Get all existing animation from node timeline
                     //Initializing Next animations object for the node
                  
-                    for (var i = 0; i < _nodePrevAnimations.length; i++) {
+                    for (var i = 0; i < _nodePrevAnimations.length; i++) 
+                    {
                       
-                      var _nodePrevAnim = _nodePrevAnimations[i];
+                        var _nodePrevAnim = _nodePrevAnimations[i];
 
-                      var _property, _value, _duration, _delay /*Delay is starting point*/, _easing;
+                        var _property, _lkt_anim_id,  _value, _duration, _delay /*Delay is starting point*/, _easing;
 
-                      _property = _nodePrevAnim.property;
-                      _duration = _nodePrevAnim.duration;
-                      _delay = _nodePrevAnim.delay;
-                      _value = _nodePrevAnim.lktValue ; 
-                      _easing = _nodePrevAnim.lktEasing ;  
+                        _property = _nodePrevAnim.property;
+                        _lkt_anim_id = _nodePrevAnim.lkt_anim_id;
+                        _duration = _nodePrevAnim.duration;
+                        _delay = _nodePrevAnim.delay;
+                        _value = _nodePrevAnim.lktValue ; 
+                        _easing = _nodePrevAnim.lktEasing ;  
 
-                      var existingAnim = {
+                        var existingAnim = {
 
-                         value : _value,
-                         duration : _duration,
-                         delay : _delay,
-                         easing : _easing
+                           lkt_anim_id : _lkt_anim_id,
+                           value : _value,
+                           duration : _duration,
+                           delay : _delay,
+                           easing : _easing
 
-                      } 
-                      
+                        } 
+                        
 
-                      nodeNextAnimations[_property] = existingAnim;
+                        nodeNextAnimations[_property] = existingAnim;
 
 
 
 
                     }
 
-                    //New animation 
-                    
+                    //New animation  : Should have a key for ref --> Displaying or Deleting purposes
+                    var lktAnimId = nodeLktClass + "_" + realAnimatable + "_" + (_nodePrevAnimations.length+1);
                     var newAnim = {
 
-                         value :  400,
-                         duration : 1200,
-                         delay : 0,
-                         easing : 'linear'
+                        lkt_anim_id : lktAnimId,
+                        value :  400,
+                        duration : 1200,
+                        delay : 0,
+                        easing : 'linear'
 
                       } 
 
@@ -321,14 +325,17 @@
                 }
                 else
                 { 
-                   //New animation
+                   //New animation  : Should have a key for ref --> Displaying or Deleting purposes
                     
+                   var lktAnimId = nodeLktClass + "_" + realAnimatable + "_" + 1;
+                        
                     var newAnim = {
-
-                         value :  400,
-                         duration : 1200,
-                         delay : 0,
-                         easing : 'linear'
+                        
+                        lkt_anim_id : lktAnimId,
+                        value :  400,
+                        duration : 1200,
+                        delay : 0,
+                        easing : 'linear'
 
                       } 
 
